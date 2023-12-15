@@ -1,3 +1,3 @@
 # test_2
 
-A new Flutter project.
+Introduces a form with a custom progress bar animation

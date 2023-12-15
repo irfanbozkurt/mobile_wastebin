@@ -8,7 +8,10 @@ class SignUpApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      routes: {'/': (context) => const SignUp()},
+      routes: {
+        '/': (context) => const SignUp(),
+        '/welcome': (context) => const WelcomeScreen(),
+      },
     );
   }
 }
@@ -42,17 +45,29 @@ class _SignUpFormState extends State<SignUpForm> {
   final _lastNameTextController = TextEditingController();
   final _usernameTextController = TextEditingController();
 
+  // Manage form progress
   double _formProgress = 0;
+  void _updateFormProgress() {
+    final controllers = [
+      _firstNameTextController,
+      _lastNameTextController,
+      _usernameTextController
+    ];
+    setState(() {
+      _formProgress = controllers
+          .map((e) => e.value.text.isNotEmpty ? (1 / controllers.length) : 0.0)
+          .reduce((value, element) => value + element);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      onChanged: _updateFormProgress,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          LinearProgressIndicator(
-            value: _formProgress,
-          ),
+          AnimatedProgressIndicator(value: _formProgress),
           Text(
             'Sign Up',
             style: Theme.of(context).textTheme.headlineMedium,
@@ -90,12 +105,80 @@ class _SignUpFormState extends State<SignUpForm> {
                     (Set<MaterialState> states) {
                   return states.contains(MaterialState.disabled)
                       ? null
-                      : Colors.blue;
+                      : _formProgress == 1
+                          ? Colors.blue
+                          : Colors.grey;
                 }),
               ),
-              onPressed: () {},
+              onPressed: () => _formProgress == 1
+                  ? Navigator.of(context).pushNamed('/welcome')
+                  : null,
               child: const Text("Sign Up"))
         ],
+      ),
+    );
+  }
+}
+
+class WelcomeScreen extends StatelessWidget {
+  const WelcomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child:
+            Text('Welcome!', style: Theme.of(context).textTheme.displayMedium),
+      ),
+    );
+  }
+}
+
+class AnimatedProgressIndicator extends StatefulWidget {
+  final double value;
+
+  const AnimatedProgressIndicator({super.key, required this.value});
+
+  @override
+  State<StatefulWidget> createState() => _AnimatedProgressIndicatorState();
+}
+
+class _AnimatedProgressIndicatorState extends State<AnimatedProgressIndicator>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animController = AnimationController(
+      duration: const Duration(milliseconds: 1200), vsync: this);
+  late final Animation<Color?> _colorAnimation =
+      _animController.drive(TweenSequence([
+    TweenSequenceItem(
+      tween: ColorTween(begin: Colors.red, end: Colors.orange),
+      weight: 1,
+    ),
+    TweenSequenceItem(
+      tween: ColorTween(begin: Colors.orange, end: Colors.yellow),
+      weight: 1,
+    ),
+    TweenSequenceItem(
+      tween: ColorTween(begin: Colors.yellow, end: Colors.green),
+      weight: 1,
+    ),
+  ]));
+  late final Animation<double> _curveAnimation =
+      _animController.drive(CurveTween(curve: Curves.easeIn));
+
+  @override
+  void didUpdateWidget(covariant AnimatedProgressIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _animController.animateTo(widget.value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animController,
+      builder: (context, child) => LinearProgressIndicator(
+        value: _curveAnimation.value,
+        backgroundColor: _colorAnimation.value?.withOpacity(0.2),
+        valueColor: _colorAnimation,
       ),
     );
   }
