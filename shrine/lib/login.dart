@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shrine/colors.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -8,13 +9,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  // TODO: Add text editing controllers (101)
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  void clearForm() {
-    _usernameController.clear();
-    _passwordController.clear();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +24,16 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Image.asset('assets/diamond.png'),
                   const SizedBox(height: 16.0),
-                  const Text('SHRINE'),
+                  Text(
+                    'SHRINE',
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
                 ],
               ),
               const SizedBox(height: 120.0),
-              // TODO: Remove filled: true values (103)
               TextField(
                 controller: _usernameController,
                 decoration: const InputDecoration(
-                  filled: true,
                   labelText: 'Username',
                 ),
               ),
@@ -44,7 +41,6 @@ class _LoginPageState extends State<LoginPage> {
               TextField(
                 controller: _passwordController,
                 decoration: const InputDecoration(
-                  filled: true,
                   labelText: 'Password',
                 ),
                 obscureText: true,
@@ -53,11 +49,30 @@ class _LoginPageState extends State<LoginPage> {
               OverflowBar(
                 alignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(child: const Text('CANCEL'), onPressed: clearForm),
-                  ElevatedButton(
-                    child: const Text('NEXT'),
-                    onPressed: () => Navigator.of(context).pop(),
+                  TextButton(
+                    child: const Text('CANCEL'),
+                    onPressed: () {
+                      _usernameController.clear();
+                      _passwordController.clear();
+                    },
+                    style: TextButton.styleFrom(
+                      foregroundColor: kShrineBrown900,
+                      shape: const BeveledRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                      ),
+                    ),
                   ),
+                  ElevatedButton(
+                      child: const Text('NEXT'),
+                      onPressed: () => Navigator.of(context).pop(),
+                      style: ElevatedButton.styleFrom(
+                        elevation: 8.0,
+                        foregroundColor: kShrineBrown900,
+                        backgroundColor: kShrinePink100,
+                        shape: const BeveledRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                        ),
+                      )),
                 ],
               ),
             ]),
