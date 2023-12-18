@@ -1,3 +1,3 @@
-# test_2
+# Shrine
 
-Introduces a form with a custom progress bar animation
+Introduces a marketplace app with good styling, a "backdrop", and an asymmetric view of goods.
