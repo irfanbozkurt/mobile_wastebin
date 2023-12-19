@@ -16,7 +16,8 @@ enum _MenuOptions {
   clearCookies,
   addCookie,
   setCookie,
-  removeCookie
+  removeCookie,
+  loadFlutterAsset
 }
 
 class Menu extends StatefulWidget {
@@ -88,6 +89,10 @@ class _MenuState extends State<Menu> {
     );
   }
 
+  Future<void> _onFlutterAssetExample(WebViewController controller) async {
+    await controller.loadFlutterAsset('assets/www/index.html');
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
@@ -119,9 +124,16 @@ class _MenuState extends State<Menu> {
           value: _MenuOptions.removeCookie,
           child: Text('Remove cookie'),
         ),
+        const PopupMenuItem<_MenuOptions>(
+          value: _MenuOptions.loadFlutterAsset,
+          child: Text('Load flutter asset'),
+        ),
       ],
       onSelected: (val) async {
         switch (val) {
+          case _MenuOptions.loadFlutterAsset:
+            await _onFlutterAssetExample(widget.controller);
+            break;
           case _MenuOptions.navigationDelegate:
             await widget.controller
                 .loadRequest(Uri.parse('https://youtube.com'));

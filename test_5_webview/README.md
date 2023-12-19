@@ -12,4 +12,5 @@ Flutter project with a WebView embedded within.
 
     This way, app runs arbitrary JS code in the device.
 
+- Loads custom HTML file (from assets folder) thanks to WebViewController
 - Manages JS cookies via WebViewCookieManager: list, clear, add, set, remove, ...
