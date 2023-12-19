@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "877501393555",
+    "project_id": "eldek-957c9",
+    "storage_bucket": "eldek-957c9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877501393555:android:01f761cafe09c4c6073b66",
+        "android_client_info": {
+          "package_name": "com.example.test_03"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyP-5x7I3K2dqyCZiT2fiCFeFzmxSgKxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
