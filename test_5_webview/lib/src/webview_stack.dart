@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+const blockedWebsites = ['youtube.com'];
+
 class WebViewStack extends StatefulWidget {
   const WebViewStack({super.key, required this.controller});
 
@@ -17,10 +19,19 @@ class _WebViewStackState extends State<WebViewStack> {
   void initState() {
     super.initState();
     widget.controller.setNavigationDelegate(NavigationDelegate(
-      onPageStarted: (url) => setState(() => loadingPercentage = 0),
-      onProgress: (progress) => setState(() => loadingPercentage = progress),
-      onPageFinished: (url) => setState(() => loadingPercentage = 100),
-    ));
+        onPageStarted: (url) => setState(() => loadingPercentage = 0),
+        onProgress: (progress) => setState(() => loadingPercentage = progress),
+        onPageFinished: (url) => setState(() => loadingPercentage = 100),
+        onNavigationRequest: (nav) {
+          for (final blockedWebsite in blockedWebsites) {
+            if (!Uri.parse(nav.url).host.contains(blockedWebsite)) continue;
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('$blockedWebsite is blocked'),
+            ));
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        }));
   }
 
   @override
