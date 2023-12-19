@@ -38,6 +38,13 @@ class _WebViewStackState extends State<WebViewStack> {
           }
           return NavigationDecision.navigate;
         }));
+    // So that we can evaluate JS
+    widget.controller.setJavaScriptMode(JavaScriptMode.unrestricted);
+    widget.controller.addJavaScriptChannel('SnackBar',
+        onMessageReceived: (msg) =>
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(msg.message),
+            )));
   }
 
   @override
