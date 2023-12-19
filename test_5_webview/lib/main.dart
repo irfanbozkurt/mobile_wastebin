@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:test_5_webview/src/webview_stack.dart';
 
 void main() {
   runApp(MaterialApp(theme: ThemeData(useMaterial3: true), home: const App()));
@@ -14,24 +13,12 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  late final WebViewController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = WebViewController()
-      ..loadRequest(Uri.parse('https://bogazici.edu.tr'));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Flutter WebView'),
-      ),
-      body: WebViewWidget(
-        controller: controller,
-      ),
-    );
+        appBar: AppBar(
+          title: const Text('Flutter WebView'),
+        ),
+        body: const WebViewStack());
   }
 }
