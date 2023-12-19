@@ -3,6 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import 'src/webview_stack.dart';
 import 'src/nav_controller.dart';
+import 'src/menu.dart';
 
 void main() {
   runApp(MaterialApp(theme: ThemeData(useMaterial3: true), home: const App()));
@@ -32,7 +33,12 @@ class _AppState extends State<App> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Flutter WebView'),
-          actions: [NavController(controller: controller)],
+          actions: [
+            NavController(controller: controller),
+            Menu(
+              controller: controller,
+            )
+          ],
         ),
         body: WebViewStack(
           controller: controller,

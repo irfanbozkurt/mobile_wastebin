@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-const blockedWebsites = ['youtube.com'];
+const blockedWebsites = {
+  ...[
+    'youtube.com',
+    'pornhub.com',
+    'xhamster.com',
+  ]
+};
 
 class WebViewStack extends StatefulWidget {
   const WebViewStack({super.key, required this.controller});
