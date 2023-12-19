@@ -6,7 +6,10 @@ Flutter project with a WebView embedded within.
 - Blacklists some sites thanks to NavigationDelegate & NavigationDecision
 - Uses PopupMenuButton / PopupMenuItem
 - Evaluates JS code using WebViewController
+
   - runJavaScript
   - runJavaScriptReturningResult
 
     This way, app runs arbitrary JS code in the device.
+
+- Manages JS cookies via WebViewCookieManager: list, clear, add, set, remove, ...
