@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:test_03/guest_book.dart';
+import 'package:test_03/yes_no_radio.dart';
 
 import 'app_state.dart';
-import 'guest_book.dart';
 
 import 'src/authentication.dart';
 import 'src/widgets.dart';
@@ -28,9 +28,7 @@ class HomePage extends StatelessWidget {
           Consumer<ApplicationState>(
             builder: (context, appState, _) => AuthFunc(
               loggedIn: appState.loggedIn,
-              signOut: () {
-                FirebaseAuth.instance.signOut();
-              },
+              signOut: FirebaseAuth.instance.signOut,
             ),
           ),
           const Divider(
@@ -48,7 +46,16 @@ class HomePage extends StatelessWidget {
             builder: (context, appState, _) => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                switch (appState.attendees) {
+                  1 => const Paragraph('1 person going'),
+                  >= 2 => Paragraph('${appState.attendees} people going'),
+                  _ => const Paragraph('No one going'),
+                },
                 if (appState.loggedIn) ...[
+                  YesNoRadio(
+                      state: appState.attending,
+                      onSelection: (attending) =>
+                          appState.attending = attending),
                   const Header('Discussion'),
                   GuestBook(
                     addMessage: appState.addMessageToGuestBook,

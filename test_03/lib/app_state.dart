@@ -14,8 +14,8 @@ import 'guest_book_message.dart';
 enum Attending { yes, no, unknown }
 
 class ApplicationState extends ChangeNotifier {
-  // Get the login information from firebaseAuth's "userChanges" event, and
-  // notify the listeners
+  // Get the login information from firebaseAuth's "userChanges"
+  // event, and notify the listeners
   ApplicationState() {
     init();
   }
@@ -50,6 +50,15 @@ class ApplicationState extends ChangeNotifier {
 
     FirebaseUIAuth.configureProviders([EmailAuthProvider()]);
 
+    FirebaseFirestore.instance
+        .collection('attendees')
+        .where('attending', isEqualTo: true)
+        .snapshots()
+        .listen((snapshot) {
+      _attendees = snapshot.docs.length;
+      notifyListeners();
+    });
+
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loggedIn = true;
@@ -65,10 +74,26 @@ class ApplicationState extends ChangeNotifier {
               .toList();
           notifyListeners();
         });
+
+        _attendingSubscription = FirebaseFirestore.instance
+            .collection('attendees')
+            .doc(user.uid)
+            .snapshots()
+            .listen((snapshot) {
+          if (snapshot.data() != null) {
+            _attending = (snapshot.data()!['attending'] as bool)
+                ? Attending.yes
+                : Attending.no;
+          } else {
+            _attending = Attending.unknown;
+          }
+          notifyListeners();
+        });
       } else {
         _loggedIn = false;
         _guestBookMessages = [];
         _guestBookSubscription?.cancel();
+        _attendingSubscription?.cancel();
       }
       notifyListeners();
     });
